@@ -86,7 +86,7 @@ class MultiTypeResolver implements LoaderResolverInterface{
 	Method: resolve
 	Returns a loader that can resolve the given resource, or false if it is unresolvable.
 	*/
-	public function resolve($resource, $type = null){
+	public function resolve(mixed $resource, ?string $type = null): LoaderInterface|false{
 		$resolvingLoader = false;
 		foreach($this->loaders as $loader){
 			if($loader->supports($resource, $type)){

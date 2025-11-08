@@ -3,6 +3,7 @@ namespace TJM\Component\DependencyInjection\Loader;
 
 use Symfony\Component\Config\Exception\FileLoaderLoadException;
 use Symfony\Component\Config\Loader\DelegatingLoader as Base;
+use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /*
@@ -30,7 +31,7 @@ class MultiPathLoader extends Base{
 	Method: load
 	Load a resource at a given absolute path, or relative to the current working directory of the PHP script.
 	*/
-	public function load($resource, $type = null){
+	public function load(mixed $resource, ?string $type = null): mixed{
 		$resolver = $this->getResolverForResource($resource, $type);
 		if(is_string($resource) && $resource[0] === '/'){
 			$resource = basename($resource);
@@ -46,7 +47,7 @@ class MultiPathLoader extends Base{
 	Method: getResolver
 	Get default resolver.  Create if not set
 	*/
-	public function getResolver(){
+	public function getResolver(): LoaderResolverInterface{
 		if(!isset($this->resolver)){
 			$this->resolver = new MultiTypeResolver($this->container, getcwd());
 		}
@@ -86,7 +87,7 @@ class MultiPathLoader extends Base{
 	Method: supports
 	{@inheritdoc}
 	*/
-	public function supports($resource, $type = null){
+	public function supports(mixed $resource, ?string $type = null): bool{
 		$resolver = $this->getResolverForResource($resource, $type);
 		return $resolver->resolve($resource, $type) !== false;
 	}
